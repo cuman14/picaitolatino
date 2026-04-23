@@ -1,0 +1,79 @@
+---
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary' | 'outline';
+  class?: string;
+  [x: string]: any;
+}
+
+const { href, variant = 'primary', class: className, ...rest } = Astro.props;
+
+const Tag = href ? 'a' : 'button';
+
+const variantStyles = {
+  primary: 'bg-forest',
+  secondary: 'bg-gold',
+  outline: 'btn-outline'
+};
+---
+
+<Tag 
+  href={href} 
+  class:list={['btn', variantStyles[variant], className]} 
+  {...rest}
+>
+  <slot />
+</Tag>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 2rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    width: 100%;
+    cursor: pointer;
+  }
+  
+  .bg-forest {
+    background-color: var(--color-primary);
+    color: white;
+  }
+  
+  .bg-forest:hover {
+    background-color: #003a1d;
+    transform: translateY(-2px);
+  }
+  
+  .bg-gold {
+    background-color: var(--color-secondary);
+    color: white;
+  }
+  
+  .bg-gold:hover {
+    background-color: #b08d4b;
+    transform: translateY(-2px);
+  }
+  
+  .btn-outline {
+    background-color: transparent;
+    border: 2px solid var(--color-primary);
+    color: var(--color-primary);
+  }
+  
+  .btn-outline:hover {
+    background-color: var(--color-primary);
+    color: white;
+  }
+
+  .btn:active {
+    transform: scale(0.98) translateY(0);
+  }
+</style>

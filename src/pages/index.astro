@@ -1,0 +1,138 @@
+---
+import BottomNav from "../components/BottomNav.astro";
+import Button from "../components/Button.astro";
+import Header from "../components/Header.astro";
+import Layout from "../layouts/Layout.astro";
+
+// Usamos la imagen generada por IA para el hero
+const heroImage = "/hero_inicio_picaito.png";
+---
+
+<Layout title="Picaito Latino - Bienvenidos">
+  <Header />
+
+  <main>
+    <section class="hero">
+      <div class="hero-overlay"></div>
+      <img src={heroImage} alt="Interior Picaito Latino" class="hero-bg" />
+
+      <div class="welcome-box fade-in">
+        <p class="subtitle">
+          <span class="lang-es">ESTILO HACIENDA MODERN</span>
+          <span class="lang-en">MODERN HACIENDA STYLE</span>
+        </p>
+        <h1>
+          <span class="lang-es">Sabor Latino con un Toque Moderno</span>
+          <span class="lang-en">Latin Flavor with a Modern Touch</span>
+        </h1>
+        <p class="description">
+          <span class="lang-es"
+            >Descubre una experiencia culinaria única donde la tradición se
+            encuentra con la sofisticación.</span
+          >
+          <span class="lang-en"
+            >Discover a unique culinary experience where tradition meets
+            sophistication.</span
+          >
+        </p>
+
+        <div class="actions">
+          <Button href="/carta" variant="primary">
+            <span class="lang-es">VER LA CARTA</span>
+            <span class="lang-en">VIEW MENU</span>
+          </Button>
+          <Button href="/platos" variant="secondary">
+            <span class="lang-es">PLATOS ESPECIALES</span>
+            <span class="lang-en">CHEF SPECIALS</span>
+          </Button>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<BottomNav />
+
+<style>
+  .hero {
+    position: relative;
+    height: calc(100vh - 140px); /* Restando header y bottom nav */
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.3),
+      rgba(0, 0, 0, 0.7)
+    );
+    z-index: -1;
+  }
+
+  .hero-content {
+    z-index: 1;
+    color: white;
+    text-align: center;
+  }
+
+  .welcome-box {
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .subtitle {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    color: var(--color-secondary);
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #fff;
+  }
+
+  .description {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  @media (min-width: 480px) {
+    h1 {
+      font-size: 3rem;
+    }
+  }
+</style>

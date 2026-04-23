@@ -1,0 +1,148 @@
+---
+---
+<header class="header">
+  <div class="container header-content">
+    <div class="header-left">
+      <!-- Empty div to balance the logo if needed, or we can just center the logo -->
+    </div>
+    
+    <a href="/" class="logo">
+      <span class="logo-text">PICAITO</span>
+      <span class="logo-sub">LATINO</span>
+    </a>
+    
+    <button id="lang-toggle" class="lang-toggle-btn" aria-label="Cambiar idioma / Change language">
+      <span class="lang-text lang-es-text current">ES</span>
+      <span class="lang-separator">/</span>
+      <span class="lang-text lang-en-text">EN</span>
+    </button>
+  </div>
+</header>
+
+<script>
+  // Setup language toggle functionality
+  function setupLangToggle() {
+    const toggleBtn = document.getElementById('lang-toggle');
+    const htmlEl = document.documentElement;
+    
+    if (!toggleBtn) return;
+
+    // Check local storage for preference
+    const savedLang = localStorage.getItem('picaito_lang');
+    if (savedLang) {
+      htmlEl.setAttribute('lang', savedLang);
+      updateToggleUI(savedLang);
+    }
+    
+    toggleBtn.addEventListener('click', () => {
+      const currentLang = htmlEl.getAttribute('lang') || 'es';
+      const newLang = currentLang === 'es' ? 'en' : 'es';
+      
+      htmlEl.setAttribute('lang', newLang);
+      localStorage.setItem('picaito_lang', newLang);
+      updateToggleUI(newLang);
+    });
+    
+    function updateToggleUI(lang) {
+      const esText = toggleBtn.querySelector('.lang-es-text');
+      const enText = toggleBtn.querySelector('.lang-en-text');
+      
+      if (lang === 'es') {
+        esText.classList.add('current');
+        enText.classList.remove('current');
+      } else {
+        esText.classList.remove('current');
+        enText.classList.add('current');
+      }
+    }
+  }
+
+  // Run on initial load and after view transitions (if used in the future)
+  document.addEventListener('DOMContentLoaded', setupLangToggle);
+</script>
+
+<style>
+  .header {
+    height: 70px;
+    background-color: var(--color-bg-paper);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+  }
+  
+  .logo-text {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    color: var(--color-primary);
+  }
+  
+  .logo-sub {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 0.6rem;
+    letter-spacing: 4px;
+    color: var(--color-secondary);
+  }
+  
+  .icon-btn {
+    color: var(--color-primary);
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+  }
+  
+  .icon-btn:active {
+    transform: scale(0.9);
+  }
+
+  .lang-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-text-dark);
+    padding: 8px;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+  }
+
+  .lang-toggle-btn:hover {
+    opacity: 1;
+  }
+
+  .lang-text {
+    transition: color 0.2s;
+  }
+
+  .lang-text.current {
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+
+  .lang-separator {
+    color: var(--color-secondary);
+    font-weight: 400;
+  }
+</style>

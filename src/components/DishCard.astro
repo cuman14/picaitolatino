@@ -1,0 +1,143 @@
+---
+import type { LocalizedString } from '../data/menu';
+
+interface Props {
+  name: LocalizedString;
+  description?: LocalizedString;
+  price: string | number;
+  secondaryPrice?: string | number;
+  allergens?: string[];
+  isDark?: boolean;
+  special?: boolean;
+}
+
+const { name, description, price, secondaryPrice, allergens = [], isDark = false, special = false } = Astro.props;
+---
+
+<div class={`dish-card glass-card hover-lift ${isDark ? 'dark' : ''}`}>
+  <div class="dish-info">
+    <div class="dish-header">
+      <h3 class="dish-name">
+        <span class="lang-es">{name.es}</span>
+        <span class="lang-en">{name.en}</span>
+        {special && <span class="special-badge">★</span>}
+      </h3>
+      <div class="dish-price">
+        <span class="price-tag">{typeof price === 'number' ? price.toFixed(2) : price}€</span>
+        {secondaryPrice && <span class="secondary-price"> / {typeof secondaryPrice === 'number' ? secondaryPrice.toFixed(2) : secondaryPrice}€</span>}
+      </div>
+    </div>
+    
+    {description && (
+      <p class="dish-description text-muted">
+        <span class="lang-es">{description.es}</span>
+        <span class="lang-en">{description.en}</span>
+      </p>
+    )}
+    
+    {allergens && allergens.length > 0 && (
+      <div class="allergens">
+        {allergens.map(allergen => (
+          <span class="allergen-icon" title={allergen}>
+            <img src={`/allergens/${allergen}.svg`} alt={allergen} onerror="this.style.display='none'" />
+            <span class="allergen-fallback">{allergen.charAt(0).toUpperCase()}</span>
+          </span>
+        ))}
+      </div>
+    )}
+  </div>
+</div>
+
+<style>
+  .dish-card {
+    padding: var(--space-md);
+    margin-bottom: var(--space-sm);
+    border-radius: var(--radius-md);
+    transition: all 0.3s ease;
+  }
+
+  .dish-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .dish-name {
+    font-size: 1.15rem;
+    color: var(--color-primary);
+    font-family: var(--font-serif);
+    flex: 1;
+  }
+
+  .dark .dish-name {
+    color: var(--color-secondary);
+  }
+
+  .special-badge {
+    color: var(--color-secondary);
+    margin-left: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .dish-price {
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .price-tag {
+    font-size: 1.1rem;
+    color: var(--color-primary);
+  }
+
+  .dark .price-tag {
+    color: white;
+  }
+
+  .secondary-price {
+    font-size: 0.85rem;
+    opacity: 0.6;
+  }
+
+  .dish-description {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 1rem;
+    font-weight: 400;
+  }
+
+  .dark .dish-description {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .allergens {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .allergen-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: rgba(0,0,0,0.05);
+    border-radius: 50%;
+    font-size: 0.6rem;
+    color: var(--color-text-muted);
+    border: 1px solid rgba(0,0,0,0.1);
+  }
+
+  .dark .allergen-icon {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.5);
+  }
+
+  .allergen-icon img {
+    width: 14px;
+    height: 14px;
+  }
+</style>
