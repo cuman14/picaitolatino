@@ -1,0 +1,133 @@
+---
+---
+<footer class="footer">
+  <div class="container footer-content">
+    <div class="footer-logo">
+      <span class="logo-text">PICAITO</span>
+      <span class="logo-sub">LATINO</span>
+    </div>
+    
+    <div class="footer-info">
+      <div class="info-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        <a href="https://share.google/ta96LWAaA50DOwXWs" target="_blank" rel="noopener noreferrer">Pl. Andalucía, 5, 11520 Rota, Cádiz</a>
+      </div>
+      <div class="info-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        <a href="tel:+34635571327">635 57 13 27</a>
+      </div>
+    </div>
+
+    <div class="footer-social">
+      <a href="https://www.instagram.com/picaitolatino?igsh=MTkxbDc3eXVpMTBicg==" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+      </a>
+      <a href="https://wa.me/34635571327" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="WhatsApp">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-11.7c.3 0 .6 0 .9.1L21 4z"></path></svg>
+      </a>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; {new Date().getFullYear()} Picaito Latino. <span class="lang-es">Todos los derechos reservados.</span><span class="lang-en">All rights reserved.</span></p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background-color: var(--color-primary-dark);
+    color: white;
+    padding: var(--space-xl) 0 var(--space-lg);
+    margin-top: var(--space-xl);
+    border-top: 2px solid var(--color-secondary);
+  }
+
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+    text-align: center;
+  }
+
+  .logo-text {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 1.8rem;
+    letter-spacing: 4px;
+    display: block;
+    color: white;
+  }
+
+  .logo-sub {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 0.8rem;
+    letter-spacing: 6px;
+    color: var(--color-secondary);
+    display: block;
+    margin-top: -5px;
+  }
+
+  .footer-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .info-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.8);
+  }
+
+  .info-item svg {
+    color: var(--color-secondary);
+  }
+
+  .info-item a {
+    transition: color 0.3s ease;
+  }
+
+  .info-item a:hover {
+    color: var(--color-secondary);
+    text-decoration: underline;
+  }
+
+  .footer-social {
+    display: flex;
+    gap: var(--space-md);
+  }
+
+  .social-link {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.3s ease;
+  }
+
+  .social-link:hover {
+    background: var(--color-secondary);
+    color: var(--color-primary-dark);
+    transform: translateY(-3px);
+    border-color: var(--color-secondary);
+  }
+
+  .footer-bottom {
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    width: 100%;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.5);
+  }
+</style>

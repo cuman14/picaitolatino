@@ -1,14 +1,13 @@
 ---
 ---
-<header class="header">
+<header class="header" id="top">
   <div class="container header-content">
     <div class="header-left">
       <!-- Empty div to balance the logo if needed, or we can just center the logo -->
     </div>
     
     <a href="/" class="logo">
-      <span class="logo-text">PICAITO</span>
-      <span class="logo-sub">LATINO</span>
+      <img src="/logo.png" alt="Picaito Latino" class="logo-image" />
     </a>
     
     <button id="lang-toggle" class="lang-toggle-btn" aria-label="Cambiar idioma / Change language">
@@ -57,8 +56,25 @@
     }
   }
 
-  // Run on initial load and after view transitions (if used in the future)
-  document.addEventListener('DOMContentLoaded', setupLangToggle);
+  // Header scroll effect
+  function setupHeaderScroll() {
+    const header = document.querySelector('.header');
+    if (!header) return;
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 20) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+  }
+
+  // Run on initial load
+  document.addEventListener('DOMContentLoaded', () => {
+    setupLangToggle();
+    setupHeaderScroll();
+  });
 </script>
 
 <style>
@@ -71,6 +87,16 @@
     position: sticky;
     top: 0;
     z-index: 100;
+    transition: all 0.3s ease;
+  }
+
+  .header.scrolled {
+    background-color: rgba(253, 250, 248, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    height: 60px;
+    box-shadow: var(--shadow-sm);
+    border-bottom-color: var(--glass-border);
   }
   
   .header-content {
@@ -86,20 +112,16 @@
     line-height: 1;
   }
   
-  .logo-text {
-    font-family: var(--font-serif);
-    font-weight: 700;
-    font-size: 1.2rem;
-    letter-spacing: 2px;
-    color: var(--color-primary);
+  .logo-image {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+    transition: height 0.3s ease;
   }
   
-  .logo-sub {
-    font-family: var(--font-sans);
-    font-weight: 400;
-    font-size: 0.6rem;
-    letter-spacing: 4px;
-    color: var(--color-secondary);
+  /* When header is scrolled, make the logo slightly smaller */
+  :global(.header.scrolled) .logo-image {
+    height: 40px;
   }
   
   .icon-btn {

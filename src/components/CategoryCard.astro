@@ -10,7 +10,7 @@ interface Props {
 const { id, name, image = "/placeholder-category.jpg" } = Astro.props;
 ---
 
-<a href={`#${id}`} class="category-card hover-lift">
+<a href={`#${id}`} class={`category-card hover-lift ${id === 'especiales' ? 'is-special' : ''}`}>
   <div class="overlay"></div>
   <img src={image} alt={name.es} class="category-img" />
   <div class="card-content">
@@ -35,8 +35,20 @@ const { id, name, image = "/placeholder-category.jpg" } = Astro.props;
     align-items: center;
     justify-content: center;
     box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .category-card.is-special {
+    border: 1px solid var(--color-secondary);
+    box-shadow: 0 0 15px rgba(196, 160, 82, 0.3);
+    animation: specialPulse 3s infinite alternate;
   }
   
+  @keyframes specialPulse {
+    0% { box-shadow: 0 0 15px rgba(196, 160, 82, 0.2); border-color: rgba(196, 160, 82, 0.5); }
+    100% { box-shadow: 0 0 25px rgba(196, 160, 82, 0.6); border-color: var(--color-secondary); }
+  }
+
   .category-img {
     position: absolute;
     top: 0;
@@ -58,8 +70,12 @@ const { id, name, image = "/placeholder-category.jpg" } = Astro.props;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.1) 100%);
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 60%, rgba(0,0,0,0.1) 100%);
     z-index: -1;
+  }
+
+  .category-card.is-special .overlay {
+    background: linear-gradient(to top, rgba(0, 48, 24, 0.9) 0%, rgba(0, 48, 24, 0.4) 60%, rgba(0, 48, 24, 0.2) 100%);
   }
   
   .card-content {
@@ -70,11 +86,18 @@ const { id, name, image = "/placeholder-category.jpg" } = Astro.props;
   }
   
   h3 {
-    font-size: 1.25rem;
-    letter-spacing: 1px;
+    font-size: 1.35rem;
+    letter-spacing: 1.5px;
     margin-bottom: 0.5rem;
     text-transform: uppercase;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    font-family: var(--font-serif);
+  }
+
+  .is-special h3 {
+    color: var(--color-secondary);
+    font-size: 1.5rem;
+    letter-spacing: 3px;
   }
   
   .explore-badge {
@@ -89,5 +112,10 @@ const { id, name, image = "/placeholder-category.jpg" } = Astro.props;
     border-radius: 20px;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(4px);
+  }
+
+  .is-special .explore-badge {
+    border-color: var(--color-secondary);
+    color: var(--color-secondary);
   }
 </style>

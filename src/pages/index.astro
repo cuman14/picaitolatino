@@ -1,138 +1,383 @@
 ---
-import BottomNav from "../components/BottomNav.astro";
-import Button from "../components/Button.astro";
-import Header from "../components/Header.astro";
 import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import DishCard from "../components/DishCard.astro";
+import CategoryCard from "../components/CategoryCard.astro";
+import Footer from "../components/Footer.astro";
+import { menuData } from "../data/menu";
 
-// Usamos la imagen generada por IA para el hero
-const heroImage = "/hero_inicio_picaito.png";
+// No filtramos nada, incluimos todas las categorías
+const categories = menuData;
+
+// Imágenes para las categorías
+const categoryImages: Record<string, string> = {
+  especiales: "/bg_especiales.png",
+  empezar: "/cat_empezar.png",
+  raciones: "/cat_raciones.png",
+  tostas:
+    "https://images.unsplash.com/photo-1525351484163-7529414344d8?q=80&w=800&auto=format&fit=crop",
+  "mini-tortillas":
+    "https://images.unsplash.com/photo-1510693206972-df098062cb71?q=80&w=800&auto=format&fit=crop",
+  postres:
+    "https://images.unsplash.com/photo-1551024506-0bccd828d307?q=80&w=800&auto=format&fit=crop",
+  bebidas:
+    "https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=800&auto=format&fit=crop",
+};
 ---
 
-<Layout title="Picaito Latino - Bienvenidos">
+<Layout title="Picaito Latino - Nuestra Carta">
   <Header />
 
-  <main>
-    <section class="hero">
-      <div class="hero-overlay"></div>
-      <img src={heroImage} alt="Interior Picaito Latino" class="hero-bg" />
+  <main class="menu-page">
+    <section class="menu-header bg-forest container fade-in">
+      <h1>
+        <span class="lang-es">Nuestra Carta</span>
+        <span class="lang-en">Our Menu</span>
+      </h1>
+      <p>
+        <span class="lang-es">Explora nuestras categorías y especialidades</span
+        >
+        <span class="lang-en">Explore our categories and specialties</span>
+      </p>
+    </section>
 
-      <div class="welcome-box fade-in">
-        <p class="subtitle">
-          <span class="lang-es">ESTILO HACIENDA MODERN</span>
-          <span class="lang-en">MODERN HACIENDA STYLE</span>
-        </p>
-        <h1>
-          <span class="lang-es">Sabor Latino con un Toque Moderno</span>
-          <span class="lang-en">Latin Flavor with a Modern Touch</span>
-        </h1>
-        <p class="description">
+    <div class="container categories-grid fade-in delay-1">
+      {
+        categories.map((cat, index) => (
+          <div class={`grid-item item-${index}`}>
+            <CategoryCard
+              id={cat.id}
+              name={cat.name}
+              image={categoryImages[cat.id] || "/hero_inicio_picaito.png"}
+            />
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="container menu-content">
+      {
+        categories.map((category) => (
+          <section
+            id={category.id}
+            class={`category-section fade-in ${category.id === "especiales" ? "special-section" : ""}`}
+          >
+            <div class="section-header">
+              <h2 class="category-title">
+                <span class="lang-es">{category.name.es}</span>
+                <span class="lang-en">{category.name.en}</span>
+              </h2>
+              <div class="section-divider" />
+              {category.id === "especiales" && (
+                <div class="special-subtitle lang-es">Selección Exclusiva</div>
+              )}
+              {category.id === "especiales" && (
+                <div class="special-subtitle lang-en">Exclusive Selection</div>
+              )}
+            </div>
+            <div class="dishes-list">
+              {category.items.map((dish) => (
+                <div
+                  class={
+                    category.id === "especiales" ? "special-dish-wrapper" : ""
+                  }
+                >
+                  <DishCard {...dish} isDark={category.id === "especiales"} />
+                </div>
+              ))}
+            </div>
+          </section>
+        ))
+      }
+    </div>
+
+    <section class="container allergens-legend fade-in">
+      <div class="glass-card legend-box">
+        <h4>
+          <span class="lang-es">Información sobre Alérgenos</span>
+          <span class="lang-en">Allergen Information</span>
+        </h4>
+        <p class="text-muted">
           <span class="lang-es"
-            >Descubre una experiencia culinaria única donde la tradición se
-            encuentra con la sofisticación.</span
+            >Consulte con nuestro personal si tiene alguna intolerancia
+            alimentaria.</span
           >
           <span class="lang-en"
-            >Discover a unique culinary experience where tradition meets
-            sophistication.</span
+            >Please consult our staff if you have any food intolerances.</span
           >
         </p>
-
-        <div class="actions">
-          <Button href="/carta" variant="primary">
-            <span class="lang-es">VER LA CARTA</span>
-            <span class="lang-en">VIEW MENU</span>
-          </Button>
-          <Button href="/platos" variant="secondary">
-            <span class="lang-es">PLATOS ESPECIALES</span>
-            <span class="lang-en">CHEF SPECIALS</span>
-          </Button>
-        </div>
       </div>
     </section>
+
+    <button
+      id="back-to-top"
+      class="back-to-top"
+      aria-label="Volver arriba / Back to top"
+    >
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="18 15 12 9 6 15"></polyline>
+      </svg>
+    </button>
+
+    <Footer />
   </main>
 </Layout>
 
-<BottomNav />
+<script>
+  // Back to top functionality
+  function setupBackToTop() {
+    const btn = document.getElementById("back-to-top");
+    if (!btn) return;
+
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 500) {
+        btn.classList.add("visible");
+      } else {
+        btn.classList.remove("visible");
+      }
+    });
+
+    btn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", setupBackToTop);
+</script>
 
 <style>
-  .hero {
-    position: relative;
-    height: calc(100vh - 140px); /* Restando header y bottom nav */
-    min-height: 500px;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    justify-content: center;
-    padding: 1rem;
+  .menu-page {
+    background-color: var(--color-bg-paper);
+    padding-bottom: 40px;
   }
 
-  .hero-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -2;
-  }
-
-  .hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.3),
-      rgba(0, 0, 0, 0.7)
-    );
-    z-index: -1;
-  }
-
-  .hero-content {
-    z-index: 1;
-    color: white;
+  .menu-header {
+    padding: 3rem 1rem;
     text-align: center;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    margin-bottom: 2.5rem;
+    background: linear-gradient(135deg, var(--color-primary) 0%, #003018 100%);
+    box-shadow: var(--shadow-md);
   }
 
-  .welcome-box {
-    padding: 2rem;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(10px);
-    border-radius: var(--radius-lg);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .subtitle {
-    font-family: var(--font-sans);
-    font-size: 0.8rem;
-    letter-spacing: 3px;
+  .menu-header h1 {
     color: var(--color-secondary);
-    margin-bottom: 1rem;
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .menu-header p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
+    letter-spacing: 1px;
+  }
+
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 160px;
+    gap: 1rem;
+    margin-bottom: 4rem;
+  }
+
+  .grid-item {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Bento Grid Spanning for 7 categories (0 to 6) */
+  .item-0 {
+    grid-column: span 2;
+    grid-row: span 1;
+  } /* Especiales */
+  .item-1 {
+    grid-column: span 1;
+    grid-row: span 2;
+  } /* Empezar */
+  .item-2 {
+    grid-column: span 1;
+    grid-row: span 1;
+  } /* Raciones */
+  .item-3 {
+    grid-column: span 1;
+    grid-row: span 1;
+  } /* Tostas */
+  .item-4 {
+    grid-column: span 2;
+    grid-row: span 1;
+  } /* Mini-tortillas */
+  .item-5 {
+    grid-column: span 1;
+    grid-row: span 1;
+  } /* Postres */
+  .item-6 {
+    grid-column: span 1;
+    grid-row: span 1;
+  } /* Bebidas */
+
+  .category-section {
+    padding: 4rem 0 2rem;
+    scroll-margin-top: 70px; /* Ajuste para el header sticky */
+  }
+
+  .special-section {
+    background: linear-gradient(
+      135deg,
+      var(--color-primary-dark) 0%,
+      var(--color-primary) 100%
+    );
+    margin: 2rem -1rem;
+    padding: 4rem 1.5rem;
+    border-radius: var(--radius-lg);
+    box-shadow:
+      inset 0 0 50px rgba(0, 0, 0, 0.3),
+      var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .special-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(
+      var(--color-secondary) 0.5px,
+      transparent 0.5px
+    );
+    background-size: 20px 20px;
+    opacity: 0.05;
+    pointer-events: none;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .category-title {
+    font-size: 2.4rem;
+    color: var(--color-primary);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 0.5rem;
+    position: relative;
+    display: inline-block;
+    font-weight: 700;
+  }
+
+  .special-section .category-title {
+    color: var(--color-secondary);
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    letter-spacing: 5px;
+    margin-bottom: 0;
+  }
+
+  .special-subtitle {
+    color: var(--color-bg-paper);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-top: -0.5rem;
+    opacity: 0.8;
     font-weight: 600;
   }
 
-  h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    color: #fff;
-  }
-
-  .description {
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
-    opacity: 0.9;
-  }
-
-  .actions {
-    display: flex;
-    flex-direction: column;
+  .dishes-list {
+    display: grid;
+    grid-template-columns: 1fr;
     gap: 1rem;
   }
 
-  @media (min-width: 480px) {
-    h1 {
-      font-size: 3rem;
+  .special-dish-wrapper {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(196, 160, 82, 0.2);
+    border-radius: var(--radius-md);
+    padding: 2px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .special-dish-wrapper:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.07);
+    border-color: var(--color-secondary);
+  }
+
+  .allergens-legend {
+    margin-top: 4rem;
+  }
+
+  .legend-box {
+    padding: 1.5rem;
+    text-align: center;
+    border-radius: var(--radius-md);
+  }
+
+  .legend-box h4 {
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .legend-box p {
+    font-size: 0.85rem;
+  }
+
+  .extra-space {
+    height: 120px;
+  }
+
+  /* Back to top button */
+  .back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 1.5rem;
+    width: 45px;
+    height: 45px;
+    background-color: var(--color-primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+    z-index: 99;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid var(--color-secondary);
+  }
+
+  .back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .back-to-top:hover {
+    background-color: var(--color-secondary);
+    color: var(--color-primary-dark);
+    transform: translateY(-5px);
+  }
+
+  @media (min-width: 768px) {
+    .dishes-list {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 </style>

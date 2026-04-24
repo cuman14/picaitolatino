@@ -1,12 +1,15 @@
 :root {
   /* Colors */
+  /* Colors */
   --color-primary: #004d27; /* Forest Green */
-  --color-secondary: #C5A059; /* Gold */
-  --color-secondary-light: #dfc18d;
+  --color-primary-dark: #00331a;
+  --color-secondary: #c4a052; /* Gold - slightly adjusted for warmth */
+  --color-secondary-dark: #8c6d2d; /* For text on light backgrounds */
+  --color-secondary-light: #e5d1a7;
   --color-bg-paper: #fdfaf8;
   --color-bg-cream: #f8f5f0;
-  --color-text-dark: #1a1a1a;
-  --color-text-muted: #666666;
+  --color-text-dark: #121812; /* Very dark green-black for elegance */
+  --color-text-muted: #555e55;
   --color-text-light: #fcf9f8;
   
   /* Glassmorphism base */

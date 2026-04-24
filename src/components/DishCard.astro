@@ -1,5 +1,5 @@
 ---
-import type { LocalizedString } from '../data/menu';
+import type { LocalizedString } from "../data/menu";
 
 interface Props {
   name: LocalizedString;
@@ -11,10 +11,21 @@ interface Props {
   special?: boolean;
 }
 
-const { name, description, price, secondaryPrice, allergens = [], isDark = false, special = false } = Astro.props;
+const {
+  name,
+  description,
+  price,
+  secondaryPrice,
+  allergens = [],
+  isDark = false,
+  special = false,
+} = Astro.props;
+const hasExtraInfo = description || (allergens && allergens.length > 0);
 ---
 
-<div class={`dish-card glass-card hover-lift ${isDark ? 'dark' : ''}`}>
+<div
+  class={`dish-card glass-card hover-lift ${isDark ? "dark" : ""} ${hasExtraInfo ? "has-description" : ""}`}
+>
   <div class="dish-info">
     <div class="dish-header">
       <h3 class="dish-name">
@@ -23,37 +34,129 @@ const { name, description, price, secondaryPrice, allergens = [], isDark = false
         {special && <span class="special-badge">★</span>}
       </h3>
       <div class="dish-price">
-        <span class="price-tag">{typeof price === 'number' ? price.toFixed(2) : price}€</span>
-        {secondaryPrice && <span class="secondary-price"> / {typeof secondaryPrice === 'number' ? secondaryPrice.toFixed(2) : secondaryPrice}€</span>}
+        <span class="price-tag"
+          >{typeof price === "number" ? price.toFixed(2) : price}€</span
+        >
+        {
+          secondaryPrice && (
+            <span class="secondary-price">
+              {" "}
+              /{" "}
+              {typeof secondaryPrice === "number"
+                ? secondaryPrice.toFixed(2)
+                : secondaryPrice}
+              €
+            </span>
+          )
+        }
       </div>
     </div>
-    
-    {description && (
-      <p class="dish-description text-muted">
-        <span class="lang-es">{description.es}</span>
-        <span class="lang-en">{description.en}</span>
-      </p>
-    )}
-    
-    {allergens && allergens.length > 0 && (
-      <div class="allergens">
-        {allergens.map(allergen => (
-          <span class="allergen-icon" title={allergen}>
-            <img src={`/allergens/${allergen}.svg`} alt={allergen} onerror="this.style.display='none'" />
-            <span class="allergen-fallback">{allergen.charAt(0).toUpperCase()}</span>
-          </span>
-        ))}
-      </div>
-    )}
+
+    <div class="expandable-content">
+      {
+        description && (
+          <p class="dish-description text-muted">
+            <span class="lang-es">{description.es}</span>
+            <span class="lang-en">{description.en}</span>
+          </p>
+        )
+      }
+
+      {
+        allergens && allergens.length > 0 && (
+          <div class="allergens">
+            {allergens.map((allergen) => (
+              <span class="allergen-icon" title={allergen}>
+                <img
+                  src={`/alergenos/${allergen}.svg`}
+                  alt={allergen}
+                  onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                />
+                <span class="allergen-fallback" style="display: none;">
+                  {allergen.charAt(0).toUpperCase()}
+                </span>
+              </span>
+            ))}
+          </div>
+        )
+      }
+    </div>
+
+    {
+      hasExtraInfo && (
+        <div class="expand-indicator">
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="3"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </div>
+      )
+    }
   </div>
 </div>
+
+<script>
+  function setupCollapsibleCards() {
+    const cards = document.querySelectorAll(".dish-card.has-description");
+
+    cards.forEach((card) => {
+      card.addEventListener("click", () => {
+        // Close other expanded cards (optional, but cleaner)
+        // cards.forEach(c => { if(c !== card) c.classList.remove('expanded'); });
+
+        card.classList.toggle("expanded");
+      });
+    });
+  }
+
+  // Run on load
+  setupCollapsibleCards();
+</script>
 
 <style>
   .dish-card {
     padding: var(--space-md);
-    margin-bottom: var(--space-sm);
     border-radius: var(--radius-md);
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: default;
+    position: relative;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.03) 0%,
+      rgba(255, 255, 255, 0.01) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .dish-card.has-description {
+    cursor: pointer;
+  }
+
+  .dish-card.has-description:hover {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.03) 100%
+    );
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .dark.dish-card.has-description:hover {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.05) 0%,
+      rgba(255, 255, 255, 0.01) 100%
+    );
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   }
 
   .dish-header {
@@ -61,6 +164,11 @@ const { name, description, price, secondaryPrice, allergens = [], isDark = false
     justify-content: space-between;
     align-items: flex-start;
     gap: 1rem;
+    margin-bottom: 0;
+    transition: margin 0.3s ease;
+  }
+
+  .expanded .dish-header {
     margin-bottom: 0.5rem;
   }
 
@@ -69,10 +177,13 @@ const { name, description, price, secondaryPrice, allergens = [], isDark = false
     color: var(--color-primary);
     font-family: var(--font-serif);
     flex: 1;
+    font-weight: 700;
+    letter-spacing: 0.5px;
   }
 
   .dark .dish-name {
-    color: var(--color-secondary);
+    color: var(--color-bg-paper);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   }
 
   .special-badge {
@@ -84,20 +195,49 @@ const { name, description, price, secondaryPrice, allergens = [], isDark = false
   .dish-price {
     text-align: right;
     white-space: nowrap;
+    font-weight: 700;
   }
 
   .price-tag {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     color: var(--color-primary);
+    font-family: var(--font-serif);
   }
 
   .dark .price-tag {
-    color: white;
+    color: #ffffff;
   }
 
   .secondary-price {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     opacity: 0.6;
+  }
+
+  .expandable-content {
+    max-height: 0;
+    overflow: hidden;
+    transition:
+      max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.3s ease,
+      margin 0.3s ease;
+    opacity: 0;
+  }
+
+  .expanded .expandable-content {
+    max-height: 500px; /* Suficiente para cualquier descripción */
+    opacity: 1;
+    margin-top: 1rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .expanded.dish-card {
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: var(--shadow-md);
+  }
+
+  .dark.expanded.dish-card {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--color-secondary);
   }
 
   .dish-description {
@@ -108,13 +248,14 @@ const { name, description, price, secondaryPrice, allergens = [], isDark = false
   }
 
   .dark .dish-description {
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.8);
   }
 
   .allergens {
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
+    margin-top: 0.5rem;
   }
 
   .allergen-icon {
@@ -123,21 +264,50 @@ const { name, description, price, secondaryPrice, allergens = [], isDark = false
     justify-content: center;
     width: 24px;
     height: 24px;
-    background: rgba(0,0,0,0.05);
+    background: rgba(0, 0, 0, 0.05);
     border-radius: 50%;
     font-size: 0.6rem;
     color: var(--color-text-muted);
-    border: 1px solid rgba(0,0,0,0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
   }
 
   .dark .allergen-icon {
-    background: rgba(255,255,255,0.1);
-    border-color: rgba(255,255,255,0.2);
-    color: rgba(255,255,255,0.5);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.5);
   }
 
   .allergen-icon img {
     width: 14px;
     height: 14px;
+  }
+
+  .expand-indicator {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.6;
+    transition:
+      transform 0.3s ease,
+      opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-secondary-dark);
+  }
+
+  .dark .expand-indicator {
+    color: var(--color-secondary);
+    opacity: 0.8;
+  }
+
+  .expanded .expand-indicator {
+    transform: translateX(-50%) rotate(180deg);
+    opacity: 0.2;
+  }
+
+  .dish-card:not(.has-description) .expand-indicator {
+    display: none;
   }
 </style>
