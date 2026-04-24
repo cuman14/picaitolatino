@@ -2,19 +2,17 @@
 ---
 <header class="header" id="top">
   <div class="container header-content">
-    <div class="header-left">
-      <!-- Empty div to balance the logo if needed, or we can just center the logo -->
-    </div>
-    
     <a href="/" class="logo">
-      <img src="/logo.png" alt="Picaito Latino" class="logo-image" />
+      <img src="/logo.jpg" alt="Picaito Latino" class="logo-image" />
     </a>
     
-    <button id="lang-toggle" class="lang-toggle-btn" aria-label="Cambiar idioma / Change language">
-      <span class="lang-text lang-es-text current">ES</span>
-      <span class="lang-separator">/</span>
-      <span class="lang-text lang-en-text">EN</span>
-    </button>
+    <div class="header-right">
+      <button id="lang-toggle" class="lang-toggle-btn" aria-label="Cambiar idioma / Change language">
+        <span class="lang-text lang-es-text current">ES</span>
+        <span class="lang-separator">/</span>
+        <span class="lang-text lang-en-text">EN</span>
+      </button>
+    </div>
   </div>
 </header>
 
@@ -103,25 +101,35 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
   }
   
   .logo {
     display: flex;
-    flex-direction: column;
     align-items: center;
     line-height: 1;
   }
   
+  /* Create a container for the language toggle to balance the flex layout */
+  .header-right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
   .logo-image {
     height: 48px;
-    width: auto;
-    object-fit: contain;
-    transition: height 0.3s ease;
+    width: 48px;
+    object-fit: cover;
+    border-radius: 10px; /* Bordes ligeramente redondeados (tipo app) */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
   }
   
   /* When header is scrolled, make the logo slightly smaller */
   :global(.header.scrolled) .logo-image {
     height: 40px;
+    width: 40px;
   }
   
   .icon-btn {
