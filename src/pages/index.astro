@@ -22,6 +22,8 @@ const categoryImages: Record<string, string> = {
     "https://images.unsplash.com/photo-1551024506-0bccd828d307?q=80&w=800&auto=format&fit=crop",
   bebidas:
     "https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=800&auto=format&fit=crop",
+  vinos:
+    "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=800&auto=format&fit=crop",
 };
 ---
 
@@ -82,7 +84,11 @@ const categoryImages: Record<string, string> = {
                     category.id === "especiales" ? "special-dish-wrapper" : ""
                   }
                 >
-                  <DishCard {...dish} isDark={category.id === "especiales"} />
+                  <DishCard
+                    {...dish}
+                    isDark={category.id === "especiales"}
+                    isWine={category.id === "vinos"}
+                  />
                 </div>
               ))}
             </div>
@@ -171,23 +177,23 @@ const categoryImages: Record<string, string> = {
 
   .menu-header h1 {
     color: var(--color-secondary);
-    font-size: 2.5rem;
+    font-size: clamp(1.5rem, 6vw, 2.5rem);
     margin-bottom: 0.75rem;
-    letter-spacing: 3px;
+    letter-spacing: clamp(1.5px, 0.8vw, 3px);
     text-transform: uppercase;
   }
 
   .menu-header p {
     color: rgba(255, 255, 255, 0.8);
-    font-size: 1rem;
+    font-size: clamp(0.85rem, 2.5vw, 1rem);
     letter-spacing: 1px;
   }
 
   .categories-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: 160px;
-    gap: 1rem;
+    grid-auto-rows: clamp(130px, 22vw, 175px);
+    gap: clamp(0.5rem, 2vw, 1rem);
     margin-bottom: 4rem;
   }
 
@@ -196,7 +202,7 @@ const categoryImages: Record<string, string> = {
     height: 100%;
   }
 
-  /* Bento Grid Spanning for 7 categories (0 to 6) */
+  /* Bento Grid Spanning — 8 categorías (0 a 7) */
   .item-0 {
     grid-column: span 2;
     grid-row: span 1;
@@ -225,6 +231,10 @@ const categoryImages: Record<string, string> = {
     grid-column: span 1;
     grid-row: span 1;
   } /* Bebidas */
+  .item-7 {
+    grid-column: span 2;
+    grid-row: span 1;
+  } /* Vinos */
 
   .category-section {
     padding: 4rem 0 2rem;
@@ -269,10 +279,10 @@ const categoryImages: Record<string, string> = {
   }
 
   .category-title {
-    font-size: 2.4rem;
+    font-size: clamp(1.3rem, 5.5vw, 2.4rem);
     color: var(--color-primary);
     text-transform: uppercase;
-    letter-spacing: 4px;
+    letter-spacing: clamp(2px, 1vw, 4px);
     margin-bottom: 0.5rem;
     position: relative;
     display: inline-block;
@@ -379,5 +389,10 @@ const categoryImages: Record<string, string> = {
     .dishes-list {
       grid-template-columns: repeat(2, 1fr);
     }
+  }
+
+  /* Vinos: siempre columna única — los precios dobles necesitan espacio */
+  #vinos .dishes-list {
+    grid-template-columns: 1fr;
   }
 </style>

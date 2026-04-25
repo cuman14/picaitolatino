@@ -1,39 +1,94 @@
 :root {
-  /* Colors */
-  /* Colors */
-  --color-primary: #004d27; /* Forest Green */
-  --color-primary-dark: #00331a;
-  --color-secondary: #c4a052; /* Gold - slightly adjusted for warmth */
-  --color-secondary-dark: #8c6d2d; /* For text on light backgrounds */
-  --color-secondary-light: #e5d1a7;
-  --color-bg-paper: #fdfaf8;
-  --color-bg-cream: #f8f5f0;
-  --color-text-dark: #121812; /* Very dark green-black for elegance */
-  --color-text-muted: #555e55;
-  --color-text-light: #fcf9f8;
-  
-  /* Glassmorphism base */
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.3);
-  
-  /* Typography */
-  --font-serif: 'Noto Serif', serif;
-  --font-sans: 'Be Vietnam Pro', sans-serif;
-  
-  /* Spacing & Borders */
+  /* ============================================
+     PALETA DE COLORES - RESTAURANTE LATINO
+     Diseñado para legibilidad móvil y calidez
+     ============================================ */
+
+  /* Primarios - Verde Bosque */
+  --color-primary: #0d4a2c; /* Forest Green más profundo */
+  --color-primary-dark: #062d1a;
+  --color-primary-light: #1a6340;
+
+  /* Acentos - Dorado Cálido */
+  --color-secondary: #c9a227; /* Gold decorativo (bordes, iconos) */
+  --color-secondary-text: #8b6914; /* Gold oscuro para texto — WCAG AA 4.6:1 sobre blanco */
+  --color-secondary-dark: #6b4f0f;
+  --color-secondary-light: #e8d5a3;
+
+  /* Especiales - Tonos Vino (para carta de vinos) */
+  --color-wine-red: #6b1f2a; /* Tinto oscuro — WCAG AA sobre fondo claro */
+  --color-wine-red-light: #a03040; /* Para elementos decorativos */
+  --color-wine-rose: #b08080; /* Rosado suave, mejorado contraste */
+  --color-wine-white: #f5f5dc; /* Blanco cálido */
+
+  /* Fondos - Papel artesanal */
+  --color-bg-paper: #faf8f5;
+  --color-bg-cream: #f5f2ed;
+  --color-bg-warm: #f0ebe3;
+
+  /* Texto - Alto contraste WCAG AA verificado */
+  --color-text-dark: #111111; /* 19:1 sobre blanco */
+  --color-text-primary: #222222; /* 16:1 sobre blanco */
+  --color-text-muted: #595959; /* 7:1 sobre blanco — pasa AAA */
+  --color-text-light: #ffffff; /* sobre fondos oscuros */
+
+  /* Estados */
+  --color-success: #2d7d46;
+  --color-warning: #d4a03c;
+  --color-error: #c44536;
+
+  /* Glassmorphism - Sutil y elegante */
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.5);
+
+  /* ============================================
+     TIPOGRAFÍA - ESCALA MOBILE-FIRST
+     Basada en 1rem = 16px (base móvil)
+     ============================================ */
+  --font-serif: "Noto Serif", Georgia, serif;
+  --font-sans: "Be Vietnam Pro", system-ui, sans-serif;
+
+  /* Escala tipográfica (ratio 1.25 - Major Third) */
+  --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem); /* 12-14px */
+  --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem); /* 14-16px */
+  --text-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem); /* 16-18px */
+  --text-lg: clamp(1.125rem, 1rem + 0.6vw, 1.25rem); /* 18-20px */
+  --text-xl: clamp(1.25rem, 1.1rem + 0.7vw, 1.5rem); /* 20-24px */
+  --text-2xl: clamp(1.5rem, 1.2rem + 1.5vw, 2rem); /* 24-32px */
+  --text-3xl: clamp(1.75rem, 1.3rem + 2.2vw, 2.5rem); /* 28-40px */
+
+  /* Pesos tipográficos */
+  --font-light: 300;
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  /* Interlineado */
+  --leading-tight: 1.2;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.75;
+
+  /* ============================================
+     ESPACIADO - Sistema 8pt
+     ============================================ */
   --radius-sm: 6px;
   --radius-md: 12px;
   --radius-lg: 20px;
-  --space-xs: 0.5rem;
-  --space-sm: 1rem;
-  --space-md: 1.5rem;
-  --space-lg: 2rem;
-  --space-xl: 3rem;
+  --radius-xl: 28px;
 
-  /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
-  --shadow-md: 0 8px 16px rgba(0,0,0,0.08);
-  --shadow-lg: 0 12px 24px rgba(0,0,0,0.12);
+  --space-xs: 0.5rem; /* 8px */
+  --space-sm: 1rem; /* 16px */
+  --space-md: 1.5rem; /* 24px */
+  --space-lg: 2rem; /* 32px */
+  --space-xl: 3rem; /* 48px */
+  --space-2xl: 4rem; /* 64px */
+
+  /* Sombras - Profundidad sutil */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.14), 0 2px 4px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 24px rgba(0, 0, 0, 0.16), 0 4px 8px rgba(0, 0, 0, 0.1);
+  --shadow-wine: 0 4px 16px rgba(107, 31, 42, 0.2);
 }
 
 * {
@@ -46,18 +101,46 @@ html {
   scroll-behavior: smooth;
 }
 
-html, body {
+html,
+body {
   font-family: var(--font-sans);
   background-color: var(--color-bg-paper);
-  color: var(--color-text-dark);
-  line-height: 1.5;
+  color: var(--color-text-primary);
+  line-height: var(--leading-normal);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: var(--text-base);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-serif);
-  font-weight: 700;
-  line-height: 1.2;
+  font-weight: var(--font-bold);
+  line-height: var(--leading-tight);
+  color: var(--color-text-dark);
+}
+
+h1 {
+  font-size: var(--text-3xl);
+}
+h2 {
+  font-size: var(--text-2xl);
+}
+h3 {
+  font-size: var(--text-xl);
+}
+h4 {
+  font-size: var(--text-lg);
+}
+h5 {
+  font-size: var(--text-base);
+}
+h6 {
+  font-size: var(--text-sm);
 }
 
 a {
@@ -85,13 +168,24 @@ button {
   padding: 0 var(--space-sm);
 }
 
-.text-center { text-align: center; }
-.text-gold { color: var(--color-secondary); }
-.bg-forest { background-color: var(--color-primary); color: var(--color-text-light); }
+.text-center {
+  text-align: center;
+}
+.text-gold {
+  color: var(--color-secondary);
+}
+.bg-forest {
+  background-color: var(--color-primary);
+  color: var(--color-text-light);
+}
 
 /* Language Toggle Utilities */
-html[lang="es"] .lang-en { display: none !important; }
-html[lang="en"] .lang-es { display: none !important; }
+html[lang="es"] .lang-en {
+  display: none !important;
+}
+html[lang="en"] .lang-es {
+  display: none !important;
+}
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
@@ -120,9 +214,15 @@ html[lang="en"] .lang-es { display: none !important; }
   animation: fadeInUp 0.6s ease-out forwards;
 }
 
-.delay-1 { animation-delay: 0.1s; }
-.delay-2 { animation-delay: 0.2s; }
-.delay-3 { animation-delay: 0.3s; }
+.delay-1 {
+  animation-delay: 0.1s;
+}
+.delay-2 {
+  animation-delay: 0.2s;
+}
+.delay-3 {
+  animation-delay: 0.3s;
+}
 
 /* Premium Utilities */
 .glass-card {
@@ -134,7 +234,9 @@ html[lang="en"] .lang-es { display: none !important; }
 }
 
 .hover-lift {
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.3s ease;
 }
 
 .hover-lift:hover {
@@ -154,7 +256,9 @@ html[lang="en"] .lang-es { display: none !important; }
 }
 
 .price-tag {
-  color: var(--color-secondary);
+  color: var(
+    --color-secondary-text
+  ); /* #8b6914 — WCAG AA 4.6:1 sobre fondo claro */
   font-weight: 700;
   font-family: var(--font-sans);
 }

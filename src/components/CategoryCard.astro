@@ -1,5 +1,16 @@
 ---
-import type { LocalizedString } from '../data/menu';
+import {
+  Barrel,
+  Beer,
+  ChefHat,
+  Flame,
+  IceCream,
+  Sparkles,
+  Utensils,
+  UtensilsCrossed,
+  Wine,
+} from "@lucide/astro";
+import type { LocalizedString } from "../data/menu";
 
 interface Props {
   id: string;
@@ -8,12 +19,34 @@ interface Props {
 }
 
 const { id, name, image = "/placeholder-category.jpg" } = Astro.props;
+
+// Mapeo de iconos por categoría (sutil, no invasivo)
+const categoryIcons: Record<string, any> = {
+  especiales: Sparkles,
+  empezar: Utensils,
+  raciones: UtensilsCrossed,
+  tostas: ChefHat,
+  "mini-tortillas": Flame,
+  postres: IceCream,
+  bebidas: Beer,
+  barril: Barrel,
+  cerveza: Beer,
+  vinos: Wine,
+};
+
+const IconComponent = categoryIcons[id] || Utensils;
 ---
 
-<a href={`#${id}`} class={`category-card hover-lift ${id === 'especiales' ? 'is-special' : ''}`}>
+<a
+  href={`#${id}`}
+  class={`category-card hover-lift ${id === "especiales" ? "is-special" : ""}`}
+>
   <div class="overlay"></div>
   <img src={image} alt={name.es} class="category-img" />
   <div class="card-content">
+    <div class="category-icon" aria-hidden="true">
+      <IconComponent size={24} strokeWidth={1.5} />
+    </div>
     <h3>
       <span class="lang-es">{name.es}</span>
       <span class="lang-en">{name.en}</span>
@@ -35,7 +68,7 @@ const { id, name, image = "/placeholder-category.jpg" } = Astro.props;
     align-items: center;
     justify-content: center;
     box-shadow: var(--shadow-sm);
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .category-card.is-special {
@@ -43,10 +76,16 @@ const { id, name, image = "/placeholder-category.jpg" } = Astro.props;
     box-shadow: 0 0 15px rgba(196, 160, 82, 0.3);
     animation: specialPulse 3s infinite alternate;
   }
-  
+
   @keyframes specialPulse {
-    0% { box-shadow: 0 0 15px rgba(196, 160, 82, 0.2); border-color: rgba(196, 160, 82, 0.5); }
-    100% { box-shadow: 0 0 25px rgba(196, 160, 82, 0.6); border-color: var(--color-secondary); }
+    0% {
+      box-shadow: 0 0 15px rgba(196, 160, 82, 0.2);
+      border-color: rgba(196, 160, 82, 0.5);
+    }
+    100% {
+      box-shadow: 0 0 25px rgba(196, 160, 82, 0.6);
+      border-color: var(--color-secondary);
+    }
   }
 
   .category-img {
@@ -63,55 +102,99 @@ const { id, name, image = "/placeholder-category.jpg" } = Astro.props;
   .category-card:hover .category-img {
     transform: scale(1.1);
   }
-  
+
   .overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 60%, rgba(0,0,0,0.1) 100%);
+    /* Denso solo en la franja inferior donde está el texto (WCAG AA sobre imagen) */
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.82) 0%,
+      rgba(0, 0, 0, 0.6) 35%,
+      rgba(0, 0, 0, 0.1) 65%,
+      rgba(0, 0, 0, 0) 100%
+    );
     z-index: -1;
   }
 
   .category-card.is-special .overlay {
-    background: linear-gradient(to top, rgba(0, 48, 24, 0.9) 0%, rgba(0, 48, 24, 0.4) 60%, rgba(0, 48, 24, 0.2) 100%);
+    background: linear-gradient(
+      to top,
+      rgba(0, 38, 18, 0.88) 0%,
+      rgba(0, 38, 18, 0.65) 35%,
+      rgba(0, 38, 18, 0.12) 65%,
+      rgba(0, 38, 18, 0) 100%
+    );
   }
-  
+
   .card-content {
     text-align: center;
     color: white;
     z-index: 1;
     padding: 1rem;
+    /* Posicionar contenido en la zona inferior donde el overlay es más denso */
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0.75rem 0.75rem 0.9rem;
   }
-  
-  h3 {
-    font-size: 1.35rem;
-    letter-spacing: 1.5px;
+
+  .category-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 0.5rem;
+    opacity: 0.85;
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+  }
+
+  .category-card:hover .category-icon {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+
+  .category-icon :global(svg) {
+    stroke: currentColor;
+  }
+
+  h3 {
+    font-size: clamp(0.85rem, 3.5vw, 1.35rem);
+    letter-spacing: clamp(1px, 0.3vw, 1.5px);
+    margin-bottom: 0.4rem;
     text-transform: uppercase;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    text-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.9),
+      0 2px 8px rgba(0, 0, 0, 0.7);
     font-family: var(--font-serif);
+    line-height: 1.2;
+    color: #fff;
   }
 
   .is-special h3 {
     color: var(--color-secondary);
-    font-size: 1.5rem;
-    letter-spacing: 3px;
+    font-size: clamp(1rem, 4vw, 1.5rem);
+    letter-spacing: clamp(1.5px, 0.5vw, 3px);
   }
-  
+
   .explore-badge {
     display: inline-block;
-    font-size: 0.65rem;
+    font-size: clamp(0.55rem, 1.5vw, 0.65rem);
     font-weight: 700;
     letter-spacing: 2px;
     color: white;
     text-transform: uppercase;
-    padding: 4px 12px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 3px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(6px);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
   }
 
   .is-special .explore-badge {
