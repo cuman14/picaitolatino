@@ -1,13 +1,19 @@
 ---
+
 ---
+
 <header class="header" id="top">
   <div class="container header-content">
     <a href="/" class="logo">
       <img src="/logo.jpg" alt="Picaito Latino" class="logo-image" />
     </a>
-    
+
     <div class="header-right">
-      <button id="lang-toggle" class="lang-toggle-btn" aria-label="Cambiar idioma / Change language">
+      <button
+        id="lang-toggle"
+        class="lang-toggle-btn"
+        aria-label="Cambiar idioma / Change language"
+      >
         <span class="lang-text lang-es-text current">ES</span>
         <span class="lang-separator">/</span>
         <span class="lang-text lang-en-text">EN</span>
@@ -19,57 +25,54 @@
 <script>
   // Setup language toggle functionality
   function setupLangToggle() {
-    const toggleBtn = document.getElementById('lang-toggle');
+    const toggleBtn = document.getElementById("lang-toggle");
     const htmlEl = document.documentElement;
-    
+
     if (!toggleBtn) return;
 
-    // Check local storage for preference
-    const savedLang = localStorage.getItem('picaito_lang');
-    if (savedLang) {
-      htmlEl.setAttribute('lang', savedLang);
-      updateToggleUI(savedLang);
-    }
-    
-    toggleBtn.addEventListener('click', () => {
-      const currentLang = htmlEl.getAttribute('lang') || 'es';
-      const newLang = currentLang === 'es' ? 'en' : 'es';
-      
-      htmlEl.setAttribute('lang', newLang);
-      localStorage.setItem('picaito_lang', newLang);
+    // Sincronizar UI con el idioma ya establecido (por Layout o localStorage)
+    const currentLang = htmlEl.getAttribute("lang") || "es";
+    updateToggleUI(currentLang);
+
+    toggleBtn.addEventListener("click", () => {
+      const currentLang = htmlEl.getAttribute("lang") || "es";
+      const newLang = currentLang === "es" ? "en" : "es";
+
+      htmlEl.setAttribute("lang", newLang);
+      localStorage.setItem("picaito_lang", newLang);
       updateToggleUI(newLang);
     });
-    
+
     function updateToggleUI(lang) {
-      const esText = toggleBtn.querySelector('.lang-es-text');
-      const enText = toggleBtn.querySelector('.lang-en-text');
-      
-      if (lang === 'es') {
-        esText.classList.add('current');
-        enText.classList.remove('current');
+      const esText = toggleBtn.querySelector(".lang-es-text");
+      const enText = toggleBtn.querySelector(".lang-en-text");
+
+      if (lang === "es") {
+        esText.classList.add("current");
+        enText.classList.remove("current");
       } else {
-        esText.classList.remove('current');
-        enText.classList.add('current');
+        esText.classList.remove("current");
+        enText.classList.add("current");
       }
     }
   }
 
   // Header scroll effect
   function setupHeaderScroll() {
-    const header = document.querySelector('.header');
+    const header = document.querySelector(".header");
     if (!header) return;
 
-    window.addEventListener('scroll', () => {
+    window.addEventListener("scroll", () => {
       if (window.scrollY > 20) {
-        header.classList.add('scrolled');
+        header.classList.add("scrolled");
       } else {
-        header.classList.remove('scrolled');
+        header.classList.remove("scrolled");
       }
     });
   }
 
   // Run on initial load
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener("DOMContentLoaded", () => {
     setupLangToggle();
     setupHeaderScroll();
   });
@@ -79,7 +82,7 @@
   .header {
     height: 70px;
     background-color: var(--color-bg-paper);
-    border-bottom: 1px solid rgba(0,0,0,0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     display: flex;
     align-items: center;
     position: sticky;
@@ -96,42 +99,42 @@
     box-shadow: var(--shadow-sm);
     border-bottom-color: var(--glass-border);
   }
-  
+
   .header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
   }
-  
+
   .logo {
     display: flex;
     align-items: center;
     line-height: 1;
   }
-  
+
   /* Create a container for the language toggle to balance the flex layout */
   .header-right {
     flex: 1;
     display: flex;
     justify-content: flex-end;
   }
-  
+
   .logo-image {
     height: 48px;
     width: 48px;
     object-fit: cover;
     border-radius: 10px; /* Bordes ligeramente redondeados (tipo app) */
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
   }
-  
+
   /* When header is scrolled, make the logo slightly smaller */
   :global(.header.scrolled) .logo-image {
     height: 40px;
     width: 40px;
   }
-  
+
   .icon-btn {
     color: var(--color-primary);
     padding: 8px;
@@ -140,7 +143,7 @@
     justify-content: center;
     transition: transform 0.2s;
   }
-  
+
   .icon-btn:active {
     transform: scale(0.9);
   }

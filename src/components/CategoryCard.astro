@@ -16,9 +16,15 @@ interface Props {
   id: string;
   name: LocalizedString;
   image?: string;
+  comingSoon?: boolean;
 }
 
-const { id, name, image = "/placeholder-category.jpg" } = Astro.props;
+const {
+  id,
+  name,
+  image = "/placeholder-category.jpg",
+  comingSoon = false,
+} = Astro.props;
 
 // Mapeo de iconos por categoría (sutil, no invasivo)
 const categoryIcons: Record<string, any> = {
@@ -38,9 +44,17 @@ const IconComponent = categoryIcons[id] || Utensils;
 ---
 
 <a
-  href={`#${id}`}
-  class={`category-card hover-lift ${id === "especiales" ? "is-special" : ""}`}
+  href={comingSoon ? undefined : `#${id}`}
+  class={`category-card hover-lift ${id === "especiales" ? "is-special" : ""} ${comingSoon ? "is-coming-soon" : ""}`}
 >
+  {
+    comingSoon && (
+      <div class="coming-soon-badge">
+        <span class="lang-es">Próximamente</span>
+        <span class="lang-en">Coming Soon</span>
+      </div>
+    )
+  }
   <div class="overlay"></div>
   <img src={image} alt={name.es} class="category-img" />
   <div class="card-content">
@@ -200,5 +214,64 @@ const IconComponent = categoryIcons[id] || Utensils;
   .is-special .explore-badge {
     border-color: var(--color-secondary);
     color: var(--color-secondary);
+  }
+
+  /* Sello Próximamente */
+  .coming-soon-badge {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 10;
+    background: linear-gradient(
+      135deg,
+      var(--color-secondary) 0%,
+      #b8941d 100%
+    );
+    color: var(--color-primary-dark);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 0.35rem 0.6rem;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    line-height: 1.2;
+    transform: rotate(3deg);
+    animation: stampPulse 2s ease-in-out infinite;
+  }
+
+  .coming-soon-badge span {
+    display: block;
+  }
+
+  .coming-soon-badge .lang-en {
+    font-size: 0.55rem;
+    opacity: 0.9;
+    margin-top: 1px;
+  }
+
+  @keyframes stampPulse {
+    0%,
+    100% {
+      transform: rotate(3deg) scale(1);
+    }
+    50% {
+      transform: rotate(3deg) scale(1.05);
+    }
+  }
+
+  /* Efecto gris para categoría próximamente */
+  .is-coming-soon .category-img {
+    filter: grayscale(60%) brightness(0.7);
+  }
+
+  .is-coming-soon:hover .category-img {
+    filter: grayscale(40%) brightness(0.8);
+  }
+
+  .is-coming-soon {
+    cursor: default;
+    pointer-events: none;
   }
 </style>

@@ -285,28 +285,7 @@ export const menuData: Category[] = [
   {
     id: "postres",
     name: { es: "POSTRES", en: "DESSERTS" },
-    items: [
-      {
-        name: { es: "Flan de Maíz", en: "Corn Flan" },
-        price: 5.0,
-        allergens: ["gluten", "huevo", "lacteos"],
-      },
-      {
-        name: { es: "Pudding de Coco", en: "Coconut Pudding" },
-        price: 6.7,
-        allergens: ["huevo", "lacteos"],
-      },
-      {
-        name: { es: "Arroz con Leche", en: "Rice Pudding" },
-        price: 5.5,
-        allergens: ["gluten", "lacteos"],
-      },
-      {
-        name: { es: "Postre de Ecuador", en: "Ecuador Dessert" },
-        price: 7.0,
-        allergens: ["gluten", "huevo", "lacteos"],
-      },
-    ],
+    items: [],
   },
   {
     id: "bebidas",

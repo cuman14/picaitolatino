@@ -51,6 +51,7 @@ const categoryImages: Record<string, string> = {
               id={cat.id}
               name={cat.name}
               image={categoryImages[cat.id] || "/hero_inicio_picaito.png"}
+              comingSoon={cat.id === "postres"}
             />
           </div>
         ))
@@ -78,19 +79,26 @@ const categoryImages: Record<string, string> = {
               )}
             </div>
             <div class="dishes-list">
-              {category.items.map((dish) => (
-                <div
-                  class={
-                    category.id === "especiales" ? "special-dish-wrapper" : ""
-                  }
-                >
-                  <DishCard
-                    {...dish}
-                    isDark={category.id === "especiales"}
-                    isWine={category.id === "vinos"}
-                  />
+              {category.items.length === 0 ? (
+                <div class="coming-soon">
+                  <span class="lang-es">Próximamente</span>
+                  <span class="lang-en">Coming Soon</span>
                 </div>
-              ))}
+              ) : (
+                category.items.map((dish) => (
+                  <div
+                    class={
+                      category.id === "especiales" ? "special-dish-wrapper" : ""
+                    }
+                  >
+                    <DishCard
+                      {...dish}
+                      isDark={category.id === "especiales"}
+                      isWine={category.id === "vinos"}
+                    />
+                  </div>
+                ))
+              )}
             </div>
           </section>
         ))
@@ -394,5 +402,27 @@ const categoryImages: Record<string, string> = {
   /* Vinos: siempre columna única — los precios dobles necesitan espacio */
   #vinos .dishes-list {
     grid-template-columns: 1fr;
+  }
+
+  /* Estilo para Próximamente */
+  .coming-soon {
+    text-align: center;
+    padding: 3rem 2rem;
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .coming-soon span {
+    display: block;
+  }
+
+  .coming-soon .lang-en {
+    font-size: 1rem;
+    opacity: 0.6;
+    margin-top: 0.5rem;
   }
 </style>
