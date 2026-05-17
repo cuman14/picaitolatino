@@ -18,13 +18,43 @@ const categoryImages: Record<string, string> = {
     "https://images.unsplash.com/photo-1525351484163-7529414344d8?q=80&w=800&auto=format&fit=crop",
   "mini-tortillas":
     "https://images.unsplash.com/photo-1510693206972-df098062cb71?q=80&w=800&auto=format&fit=crop",
+  "tostadas-desayuno":
+    "https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?q=80&w=800&auto=format&fit=crop",
   postres:
     "https://images.unsplash.com/photo-1551024506-0bccd828d307?q=80&w=800&auto=format&fit=crop",
   bebidas:
     "https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=800&auto=format&fit=crop",
+  "combinados-chupitos":
+    "https://images.unsplash.com/photo-1551538827-9c037cb4f32a?q=80&w=800&auto=format&fit=crop",
+  otros:
+    "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop",
   vinos:
     "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=800&auto=format&fit=crop",
 };
+
+// Categorías con subcategorías (para renderizar subheaders)
+const SUBCATEGORY_CATS = new Set(["vinos", "bebidas"]);
+
+// Agrupa items por subcategory, preservando orden
+function groupBySubcategory(items: (typeof categories)[0]["items"]) {
+  const groups: { label: string | null; items: typeof items }[] = [];
+  let currentLabel: string | null = null;
+  let currentGroup: typeof items = [];
+  for (const item of items) {
+    const label = item.subcategory ?? null;
+    if (label !== currentLabel) {
+      if (currentGroup.length > 0)
+        groups.push({ label: currentLabel, items: currentGroup });
+      currentLabel = label;
+      currentGroup = [item];
+    } else {
+      currentGroup.push(item);
+    }
+  }
+  if (currentGroup.length > 0)
+    groups.push({ label: currentLabel, items: currentGroup });
+  return groups;
+}
 ---
 
 <Layout title="Picaito Latino - Nuestra Carta">
@@ -58,50 +88,97 @@ const categoryImages: Record<string, string> = {
       }
     </div>
 
+    <nav class="category-nav" aria-label="Categorías del menú">
+      {
+        categories.map((cat) => (
+          <a href={`#${cat.id}`} class="nav-chip" data-target={cat.id}>
+            <span class="lang-es">{cat.name.es}</span>
+            <span class="lang-en">{cat.name.en}</span>
+          </a>
+        ))
+      }
+    </nav>
+
     <div class="container menu-content">
       {
-        categories.map((category) => (
-          <section
-            id={category.id}
-            class={`category-section fade-in ${category.id === "especiales" ? "special-section" : ""}`}
-          >
-            <div class="section-header">
-              <h2 class="category-title">
-                <span class="lang-es">{category.name.es}</span>
-                <span class="lang-en">{category.name.en}</span>
-              </h2>
-              <div class="section-divider" />
-              {category.id === "especiales" && (
-                <div class="special-subtitle lang-es">Selección Exclusiva</div>
-              )}
-              {category.id === "especiales" && (
-                <div class="special-subtitle lang-en">Exclusive Selection</div>
-              )}
-            </div>
-            <div class="dishes-list">
+        categories.map((category) => {
+          const useSubcategories = SUBCATEGORY_CATS.has(category.id);
+          const groups = useSubcategories
+            ? groupBySubcategory(category.items)
+            : null;
+          return (
+            <section
+              id={category.id}
+              class={`category-section fade-in ${category.id === "especiales" ? "special-section" : ""}`}
+            >
+              <div class="section-header">
+                <h2 class="category-title">
+                  <span class="lang-es">{category.name.es}</span>
+                  <span class="lang-en">{category.name.en}</span>
+                </h2>
+                <div class="section-divider" />
+                {category.id === "especiales" && (
+                  <div class="special-subtitle lang-es">
+                    Selección Exclusiva
+                  </div>
+                )}
+                {category.id === "especiales" && (
+                  <div class="special-subtitle lang-en">
+                    Exclusive Selection
+                  </div>
+                )}
+              </div>
+
               {category.items.length === 0 ? (
                 <div class="coming-soon">
                   <span class="lang-es">Próximamente</span>
                   <span class="lang-en">Coming Soon</span>
                 </div>
-              ) : (
-                category.items.map((dish) => (
-                  <div
-                    class={
-                      category.id === "especiales" ? "special-dish-wrapper" : ""
-                    }
-                  >
-                    <DishCard
-                      {...dish}
-                      isDark={category.id === "especiales"}
-                      isWine={category.id === "vinos"}
-                    />
+              ) : useSubcategories && groups ? (
+                groups.map((group) => (
+                  <div class="subcategory-block">
+                    {group.label && (
+                      <h3 class="subcategory-header" aria-label={group.label}>
+                        <span class="subcategory-line" aria-hidden="true" />
+                        <span class="subcategory-label">{group.label}</span>
+                        <span class="subcategory-line" aria-hidden="true" />
+                      </h3>
+                    )}
+                    <div
+                      class={`dishes-list ${category.id === "vinos" ? "wines-list" : ""}`}
+                    >
+                      {group.items.map((dish) => (
+                        <DishCard
+                          {...dish}
+                          isDark={category.id === "especiales"}
+                          isWine={category.id === "vinos"}
+                        />
+                      ))}
+                    </div>
                   </div>
                 ))
+              ) : (
+                <div class="dishes-list">
+                  {category.items.map((dish) => (
+                    <div
+                      class={
+                        category.id === "especiales"
+                          ? "special-dish-wrapper"
+                          : ""
+                      }
+                    >
+                      <DishCard
+                        {...dish}
+                        isDark={category.id === "especiales"}
+                        isWine={category.id === "vinos"}
+                      />
+                    </div>
+                  ))}
+                </div>
               )}
-            </div>
-          </section>
-        ))
+            </section>
+          );
+        })
       }
     </div>
 
@@ -166,6 +243,65 @@ const categoryImages: Record<string, string> = {
   }
 
   document.addEventListener("DOMContentLoaded", setupBackToTop);
+
+  // Category nav — IntersectionObserver for active chip
+  function setupCategoryNav() {
+    const nav = document.querySelector(".category-nav");
+    if (!nav) return;
+
+    const chips = nav.querySelectorAll<HTMLElement>(".nav-chip");
+    const sections = Array.from(
+      document.querySelectorAll<HTMLElement>("section[id].category-section"),
+    );
+
+    if (!chips.length || !sections.length) return;
+
+    function setActive(id: string) {
+      chips.forEach((chip) => {
+        const isActive = chip.dataset.target === id;
+        chip.classList.toggle("active", isActive);
+        if (isActive) {
+          chip.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+            inline: "center",
+          });
+        }
+      });
+    }
+
+    // Set first chip active on load
+    if (sections[0]) setActive(sections[0].id);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActive((entry.target as HTMLElement).id);
+          }
+        });
+      },
+      {
+        rootMargin: "-122px 0px -55% 0px",
+        threshold: 0,
+      },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    // Click: smooth scroll
+    chips.forEach((chip) => {
+      chip.addEventListener("click", (e) => {
+        e.preventDefault();
+        const target = document.getElementById(chip.dataset.target || "");
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", setupCategoryNav);
 </script>
 
 <style>
@@ -197,6 +333,7 @@ const categoryImages: Record<string, string> = {
     letter-spacing: 1px;
   }
 
+  /* Bento Grid */
   .categories-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -210,43 +347,111 @@ const categoryImages: Record<string, string> = {
     height: 100%;
   }
 
-  /* Bento Grid Spanning — 8 categorías (0 a 7) */
+  /* Bento Grid Spanning — 11 categorías */
   .item-0 {
     grid-column: span 2;
     grid-row: span 1;
-  } /* Especiales */
+  }
   .item-1 {
     grid-column: span 1;
     grid-row: span 2;
-  } /* Empezar */
+  }
   .item-2 {
     grid-column: span 1;
     grid-row: span 1;
-  } /* Raciones */
+  }
   .item-3 {
     grid-column: span 1;
     grid-row: span 1;
-  } /* Tostas */
+  }
   .item-4 {
     grid-column: span 2;
     grid-row: span 1;
-  } /* Mini-tortillas */
+  }
   .item-5 {
     grid-column: span 1;
     grid-row: span 1;
-  } /* Postres */
+  }
   .item-6 {
     grid-column: span 1;
     grid-row: span 1;
-  } /* Bebidas */
+  }
   .item-7 {
     grid-column: span 2;
     grid-row: span 1;
-  } /* Vinos */
+  }
+  .item-8 {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+  .item-9 {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+  .item-10 {
+    grid-column: span 2;
+    grid-row: span 1;
+  }
+
+  /* Category nav — sticky pills */
+  .category-nav {
+    position: sticky;
+    top: 60px;
+    z-index: 50;
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    background-color: var(--color-bg-paper);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    touch-action: pan-x;
+  }
+
+  .category-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-chip {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--color-primary);
+    background: transparent;
+    border: 1.5px solid rgba(0, 60, 30, 0.18);
+    transition:
+      background 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+    touch-action: manipulation;
+    text-decoration: none;
+  }
+
+  .nav-chip:hover {
+    background: rgba(0, 60, 30, 0.07);
+    border-color: var(--color-primary);
+  }
+
+  .nav-chip.active {
+    background: var(--color-primary);
+    color: var(--color-secondary);
+    border-color: var(--color-primary);
+  }
 
   .category-section {
     padding: 4rem 0 2rem;
-    scroll-margin-top: 70px; /* Ajuste para el header sticky */
+    scroll-margin-top: 122px; /* header (70px) + category-nav (52px) */
   }
 
   .special-section {
@@ -400,8 +605,43 @@ const categoryImages: Record<string, string> = {
   }
 
   /* Vinos: siempre columna única — los precios dobles necesitan espacio */
-  #vinos .dishes-list {
+  #vinos .dishes-list,
+  #vinos .wines-list {
     grid-template-columns: 1fr;
+  }
+
+  /* Subcategory headers */
+  .subcategory-block {
+    margin-bottom: 0.5rem;
+  }
+
+  .subcategory-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 1.75rem 0 1rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--color-secondary-dark);
+  }
+
+  #vinos .subcategory-header {
+    color: var(--color-wine-red, #6b1f2a);
+  }
+
+  .subcategory-line {
+    flex: 1;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.25;
+    border-radius: 1px;
+  }
+
+  .subcategory-label {
+    flex-shrink: 0;
+    white-space: nowrap;
   }
 
   /* Estilo para Próximamente */
