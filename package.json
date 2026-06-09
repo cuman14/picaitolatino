@@ -9,11 +9,14 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "generate:pdf": "tsx IAtools/scripts/generate-menu-pdf.ts"
   },
   "dependencies": {
     "@astrojs/vercel": "^10.0.5",
     "@lucide/astro": "^1.11.0",
-    "astro": "^6.1.9"
+    "astro": "^6.1.9",
+    "puppeteer": "^25.0.4",
+    "tsx": "^4.22.4"
   }
 }
