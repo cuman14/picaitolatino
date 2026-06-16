@@ -115,7 +115,7 @@ export const menuData: Category[] = [
       },
       {
         name: { es: "Café Cortado", en: "Macchiato" },
-        price: 1.15,
+        price: 1.5,
         allergens: ["lacteos"],
         subcategory: "Cafetería",
       },
@@ -680,7 +680,7 @@ export const menuData: Category[] = [
       },
       {
         name: { es: "Beefeater con tónica", en: "Beefeater with Tonic" },
-        price: 8.0,
+        price: 8.5,
       },
       {
         name: { es: "Habana club", en: "Havana Club" },
